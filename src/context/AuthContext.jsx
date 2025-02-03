@@ -3,7 +3,9 @@ import React, { createContext, useState } from 'react';
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [token, setToken] = useState(null);
+
+  const [token, setToken] = useState(() => sessionStorage.getItem('token'));
+
 
   const login = async (username, password) => {
     try {
@@ -16,21 +18,21 @@ export const AuthProvider = ({ children }) => {
       });
 
       if (!response.ok) {
-        console.info(response.error);
         throw new Error('Login failed');
       }
 
-      const data = await response.text();
-      setToken(data.token);  // Assuming the API returns a token field
+      const token = await response.text();
+      setToken(token);  
+      sessionStorage.setItem('token', token);
     } catch (error) {
       console.error('Error during login:', error);
-      onsole.info(error.error);
       throw error; // Rethrow error so it can be caught in the component
     }
   };
 
   const logout = () => {
     setToken(null);
+    sessionStorage.removeItem('token');
   };
 
   return (
