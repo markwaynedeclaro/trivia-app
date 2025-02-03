@@ -1,5 +1,5 @@
-import React, { useState,useContext } from "react";
-import { AuthContext } from '../context/AuthContext';
+import { useState,useContext } from "react";
+import { useAuth } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 
 const LoginPage = () => {
@@ -7,7 +7,7 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
 
-  const { login } = useContext(AuthContext);
+  const { login } = useAuth();
   const navigate = useNavigate(); // Use the navigate hook inside a component
 
   const handleLogin = async (e) => {

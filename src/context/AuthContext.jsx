@@ -1,11 +1,15 @@
-import React, { createContext, useState } from 'react';
+import { createContext, useContext, useState } from 'react';
 
-export const AuthContext = createContext();
+const AuthContext = createContext();
+
+export function useAuth() {
+  return useContext(AuthContext);
+}
 
 export const AuthProvider = ({ children }) => {
 
   const [token, setToken] = useState(() => sessionStorage.getItem('token'));
-
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const login = async (username, password) => {
     try {
@@ -23,8 +27,10 @@ export const AuthProvider = ({ children }) => {
 
       const token = await response.text();
       setToken(token);  
+      setIsAuthenticated(true);
       sessionStorage.setItem('token', token);
     } catch (error) {
+      setIsAuthenticated(false);
       console.error('Error during login:', error);
       throw error; // Rethrow error so it can be caught in the component
     }
@@ -32,11 +38,12 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     setToken(null);
+    setIsAuthenticated(false);
     sessionStorage.removeItem('token');
   };
 
   return (
-    <AuthContext.Provider value={{ token, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, token, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

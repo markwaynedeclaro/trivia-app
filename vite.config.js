@@ -8,4 +8,7 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
+  esbuild: {
+    jsxInject: `import React from 'react'`, // Ensure React is automatically imported for JSX
+  },
 })

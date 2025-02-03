@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
-import { AuthContext } from '../context/AuthContext';
+import { useContext } from 'react';
+import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 const Landing = () => {
-  const { token, logout } = useContext(AuthContext);
+  const { token, logout } = useAuth();
   const navigate = useNavigate(); // Use the navigate hook inside a component
 
   const handleLogout = (e) => {
