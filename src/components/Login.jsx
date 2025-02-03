@@ -1,13 +1,22 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState,useContext } from "react";
+import { AuthContext } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
+  const { login } = useContext(AuthContext);
+  const navigate = useNavigate(); // Use the navigate hook inside a component
 
-  const handleLogin = () => {
-    navigate("/landing");
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      await login(username, password);
+      navigate('/landing');  // Redirect to landing page after successful login
+    } catch (error) {
+      console.error('Login error:', error);
+      navigate('/login'); 
+    }
   };
 
   return (
